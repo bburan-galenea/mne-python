@@ -116,8 +116,13 @@ pl.ylim(-100, 250)
 
 pl.subplot(2, 1, 2)
 
-# Create new stats image with only significant clusters
-T_obs_plot = np.nan * np.ones_like(T_obs)
+# Create new stats image with only significant clusters.  The following approach
+# to initializing an array of NaNs is the recommended approach by Numpy
+# developers (as opposed to `np.nan * np.ones_like(T_obs)` which is much
+# slower).
+T_obs_plot = np.empty_like(T_obs)
+T_obs_plot.fill(np.nan)
+
 for c, p_val in zip(clusters, cluster_p_values):
     if p_val <= 0.05:
         T_obs_plot[c] = T_obs[c]
